@@ -3,8 +3,8 @@ from typing import Any
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import JSONResponse
 
+from src.config import ENVS
 from src.common.types import Environment
-from src.config.general import General
 
 # ========================== Custom exception handler
 
@@ -34,7 +34,9 @@ class AppBaseException(HTTPException):
         status_code: int,
         data: Any | None = None,
     ):
-        if (General.ENVIRONMENT == Environment.PRODUCTION) and (status_code >= 500):
+        if (ENVS.GENERAL.ENVIRONMENT == Environment.PRODUCTION) and (
+            status_code >= 500
+        ):
             self.data = None
         else:
             self.data = str(data)

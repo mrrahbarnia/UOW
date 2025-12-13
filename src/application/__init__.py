@@ -1,1 +1,1 @@
-from src.application.app import app  # noqa
+from .init_app import application  # noqa

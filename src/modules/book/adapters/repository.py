@@ -9,11 +9,12 @@ from src.common import types
 
 
 class IRepository(Protocol):
+    def __init__(self, session: AsyncSession) -> None: ...
     async def get_by_id(self, id: types.BookID) -> DomainBook | None: ...
     async def add(self, domain_book: DomainBook) -> types.BookID | None: ...
 
 
-class SqlalchemyRepository:
+class SqlAlchemyRepository:
     def __init__(self, session: AsyncSession) -> None:
         self.session = session
 
@@ -47,5 +48,5 @@ class SqlalchemyRepository:
 
 
 class InMemoryRepository:
-    # I can mock the repository for testing with an in-memory db like sqlite
+    # I can mock the repository for testing with an in-memory DB like sqlite
     ...
