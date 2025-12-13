@@ -12,6 +12,7 @@ class IRepository(Protocol):
     def __init__(self, session: AsyncSession) -> None: ...
     async def get_by_id(self, id: types.BookID) -> DomainBook | None: ...
     async def add(self, domain_book: DomainBook) -> types.BookID | None: ...
+    async def update(self, domain_book: DomainBook) -> None: ...
 
 
 class SqlAlchemyRepository:
@@ -45,6 +46,20 @@ class SqlAlchemyRepository:
             .returning(ORMBook.id)
         )
         return await self.session.scalar(stmt)
+
+    async def update(self, domain_book: DomainBook) -> None:
+        stmt = (
+            sa.update(ORMBook)
+            .values(
+                {
+                    ORMBook.title: domain_book.title,
+                    ORMBook.borrow_count: domain_book.borrow_count,
+                    ORMBook.status: domain_book.status,
+                }
+            )
+            .where(ORMBook.id == domain_book.id)
+        )
+        await self.session.execute(stmt)
 
 
 class InMemoryRepository:
