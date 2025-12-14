@@ -23,10 +23,6 @@ async def borrow(uow: IUnitOfWork, book_id: BookID) -> None:
             raise exc.EntityNotFound
         book.borrow()
         await uow.books.update(domain_book=book)
-        # Dispatching events
-        while book.events:
-            event = book.events.pop(0)
-            await messagebus.handle(event)
 
 
 async def return_book(uow: IUnitOfWork, book_id: BookID) -> None:
@@ -36,7 +32,7 @@ async def return_book(uow: IUnitOfWork, book_id: BookID) -> None:
             raise exc.EntityNotFound
         book.return_book()
         await uow.books.update(domain_book=book)
-        # Dispatching events
-        while book.events:
-            event = book.events.pop(0)
-            await messagebus.handle(event)
+    # Dispatching events
+    while book.events:
+        event = book.events.pop(0)
+        await messagebus.handle(event)
