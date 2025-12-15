@@ -35,8 +35,6 @@ class Book:
         self.status = BookStatusEnum.BORROWED
         self.borrow_count += 1
 
-        self.events.append(events.BookBorrowed(id=self.id, title=self.title))
-
     def return_book(self):
         if self.status == BookStatusEnum.AVAILABLE:
             raise BookNotBorrowedExc
