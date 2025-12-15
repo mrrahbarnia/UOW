@@ -6,6 +6,7 @@ from sqlalchemy.orm import DeclarativeBase, MappedAsDataclass
 from sqlalchemy.types import UUID
 
 from ..domain.models import BookStatusEnum
+
 from src.common import types
 
 

@@ -2,6 +2,7 @@ from typing import Callable
 
 from . import handlers
 from ..domain.events import BookReturned
+
 from src.common.types import Event
 
 

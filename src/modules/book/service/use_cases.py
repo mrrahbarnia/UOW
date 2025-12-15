@@ -19,7 +19,7 @@ async def create_book(uow: IUnitOfWork, title: str) -> BookID:
 
 async def borrow(uow: IUnitOfWork, book_id: BookID) -> None:
     async with uow:
-        book = await uow.books.get_by_id(id=book_id)
+        book = await uow.books.get_by_id(id=book_id, lock=True)
         if not book:
             raise exc.EntityNotFound
         book.borrow()

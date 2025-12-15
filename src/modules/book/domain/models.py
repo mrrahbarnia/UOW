@@ -2,6 +2,7 @@ from dataclasses import dataclass, field
 from enum import StrEnum, auto
 
 from . import events
+
 from src.common import types
 
 

@@ -1,14 +1,19 @@
 from functools import lru_cache
 
-from pydantic import BaseModel
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 from . import schemas
+from src.common.types import Environment
 
 
-class _ENVS(BaseModel):
-    POSTGRESQL: schemas.PostgreSQL = schemas.PostgreSQL()  # type: ignore
-    FASTAPI: schemas.FastAPI = schemas.FastAPI()  # type: ignore
-    GENERAL: schemas.General = schemas.General()  # type: ignore
+class _ENVS(BaseSettings):
+    model_config = SettingsConfigDict(
+        env_nested_delimiter="__",
+        env_file=".env",
+    )
+    ENVIRONMENT: Environment
+    POSTGRESQL: schemas.PostgreSQL
+    FASTAPI: schemas.FastAPI
 
 
 @lru_cache

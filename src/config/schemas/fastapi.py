@@ -1,9 +1,7 @@
-from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic_settings import BaseSettings
 
 
 class FastAPI(BaseSettings):
-    model_config = SettingsConfigDict(env_prefix="FASTAPI__")
-
     APPLICATION_NAME: str
     APPLICATION_DESCRIPTION: str
     APPLICATION_VERSION: str

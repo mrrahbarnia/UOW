@@ -34,9 +34,7 @@ class AppBaseException(HTTPException):
         status_code: int,
         data: Any | None = None,
     ):
-        if (ENVS.GENERAL.ENVIRONMENT == Environment.PRODUCTION) and (
-            status_code >= 500
-        ):
+        if (ENVS.ENVIRONMENT == Environment.PRODUCTION) and (status_code >= 500):
             self.data = None
         else:
             self.data = str(data)

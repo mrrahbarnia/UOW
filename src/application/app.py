@@ -9,12 +9,12 @@ app: FastAPI = FastAPI(
     description=ENVS.FASTAPI.APPLICATION_DESCRIPTION,
     version=ENVS.FASTAPI.APPLICATION_VERSION,
     docs_url=None
-    if ENVS.GENERAL.ENVIRONMENT == Environment.PRODUCTION
+    if ENVS.ENVIRONMENT == Environment.PRODUCTION
     else ENVS.FASTAPI.DOCS_URL,
     openapi_url=None
-    if ENVS.GENERAL.ENVIRONMENT == Environment.PRODUCTION
+    if ENVS.ENVIRONMENT == Environment.PRODUCTION
     else ENVS.FASTAPI.OPENAPI_URL,
     redoc_url=None
-    if ENVS.GENERAL.ENVIRONMENT == Environment.PRODUCTION
+    if ENVS.ENVIRONMENT == Environment.PRODUCTION
     else ENVS.FASTAPI.REDOC_URL,
 )

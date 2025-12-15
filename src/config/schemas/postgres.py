@@ -1,9 +1,7 @@
-from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic_settings import BaseSettings
 
 
 class PostgreSQL(BaseSettings):
-    model_config = SettingsConfigDict(env_prefix="POSTGRESQL__")
-
     HOST: str
     PORT: str
     DATABASE: str

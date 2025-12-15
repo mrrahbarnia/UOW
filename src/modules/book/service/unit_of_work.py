@@ -7,6 +7,7 @@ from sqlalchemy.ext.asyncio import (
 )
 
 from ..adapters import repository as repo
+
 from src.config import ENVS
 
 ASYNC_ENGINE: AsyncEngine = create_async_engine(ENVS.POSTGRESQL.get_url)
