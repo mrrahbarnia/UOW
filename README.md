@@ -1,6 +1,6 @@
 # Bookkeeper
 
-**Bookkeeper** is a reference Python project inspired **Architecture patterns with Python** book.
+**Bookkeeper** is a reference Python project inspired by **Architecture patterns with Python** book.
 
 ---
 
