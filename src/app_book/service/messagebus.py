@@ -3,7 +3,7 @@ from typing import Callable
 from . import handlers
 from ..domain.events import BookReturned
 
-from src.common.types import Event
+from src.manager.common.types import Event
 
 
 EVENT_HANDLERS: dict[type[Event], list[Callable]] = {

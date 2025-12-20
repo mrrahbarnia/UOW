@@ -7,7 +7,7 @@ from sqlalchemy.types import UUID
 
 from ..domain.models import BookStatusEnum
 
-from src.common import types
+from src.manager.common import types
 
 
 class BaseModel(DeclarativeBase, MappedAsDataclass):

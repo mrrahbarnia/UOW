@@ -6,7 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from .orm import Book as ORMBook
 from ..domain.models import Book as DomainBook
 
-from src.common import types
+from src.manager.common import types
 
 
 class IRepository(Protocol):

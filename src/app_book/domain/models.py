@@ -3,7 +3,7 @@ from enum import StrEnum, auto
 
 from . import events
 
-from src.common import types
+from src.manager.common import types
 
 
 class BookStatusEnum(StrEnum):

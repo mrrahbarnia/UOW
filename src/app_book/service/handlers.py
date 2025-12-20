@@ -1,7 +1,7 @@
 from ..domain.events import BookReturned
 from ..adapters.notifications import INotification
 
-from src.common.container import container
+from src.manager.common.container import container
 
 
 async def send_book_returned_notification(

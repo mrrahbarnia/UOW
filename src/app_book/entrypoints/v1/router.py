@@ -1,15 +1,14 @@
 from typing import Annotated
 from fastapi import APIRouter, status, Depends
 
-from . import schemas
+from . import schemas, http_exceptions
+from .http_response import HTTPResponse
 from ..dependencies import get_uow
 from ...service import use_cases, exceptions as service_exc
 from ...service.unit_of_work import SqlAlchemyUnitOfWork
 from ...domain.models import BookAlreadyBorrowedExc, BookNotBorrowedExc
 
-from src.application import exceptions as http_exceptions
-from src.application.http_response import HTTPResponse
-from src.common.types import BookID
+from src.manager.common.types import BookID
 
 app = APIRouter(prefix="/v1/books", tags=["books"])
 

@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 
-from src.config import ENVS
-from src.common.types import Environment
+from src.manager.config import ENVS
+from src.manager.common.types import Environment
 
 
 app: FastAPI = FastAPI(

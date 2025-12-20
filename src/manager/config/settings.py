@@ -1,9 +1,7 @@
-from functools import lru_cache
-
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 from . import schemas
-from src.common.types import Environment
+from src.manager.common.types import Environment
 
 
 class _ENVS(BaseSettings):
@@ -16,9 +14,4 @@ class _ENVS(BaseSettings):
     FASTAPI: schemas.FastAPI
 
 
-@lru_cache
-def get_envs() -> _ENVS:
-    return _ENVS()  # type: ignore
-
-
-ENVS = get_envs()
+ENVS = _ENVS()  # type: ignore

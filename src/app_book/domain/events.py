@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from src.common import types
+from src.manager.common import types
 
 
 @dataclass(frozen=True)

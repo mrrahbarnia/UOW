@@ -8,7 +8,7 @@ from sqlalchemy.ext.asyncio import (
 
 from ..adapters import repository as repo
 
-from src.config import ENVS
+from src.manager.config import ENVS
 
 ASYNC_ENGINE: AsyncEngine = create_async_engine(ENVS.POSTGRESQL.get_url)
 SESSION_MAKER = async_sessionmaker(ASYNC_ENGINE, expire_on_commit=False)

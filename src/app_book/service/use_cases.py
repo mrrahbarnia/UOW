@@ -6,7 +6,7 @@ from .unit_of_work import IUnitOfWork
 from ..domain.models import Book as DomainBook
 from ..domain.events import BookReturned
 
-from src.common.types import BookID
+from src.manager.common.types import BookID
 
 
 async def create_book(uow: IUnitOfWork, title: str) -> BookID:
