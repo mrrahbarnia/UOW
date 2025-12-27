@@ -1,7 +1,7 @@
 from ..adapters.notifications import INotification
 
-from src.manager.common.container import container
-from src.infrastructure.messagebus import handler_register
+from src.manager.dependencies.container import container
+from src.events.messagebus import handler_register
 from ..domain.events import BookReturned
 
 

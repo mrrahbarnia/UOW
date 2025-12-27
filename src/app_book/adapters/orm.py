@@ -5,7 +5,7 @@ import sqlalchemy.orm as so
 
 from ..domain.models import BookStatusEnum
 from src.manager.common import types
-from src.infrastructure.adapters.orm import BaseModel
+from src.events.orm import BaseModel
 
 
 class Book(BaseModel):
