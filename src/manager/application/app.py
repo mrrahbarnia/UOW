@@ -5,9 +5,9 @@ from src.manager.common.types import Environment
 
 
 app: FastAPI = FastAPI(
-    title=ENVS.FASTAPI.APPLICATION_NAME,
-    description=ENVS.FASTAPI.APPLICATION_DESCRIPTION,
-    version=ENVS.FASTAPI.APPLICATION_VERSION,
+    title="book-borrow",
+    description="People can borrow book in this application",
+    version="0.0.1",
     docs_url=None
     if ENVS.ENVIRONMENT == Environment.PRODUCTION
     else ENVS.FASTAPI.DOCS_URL,

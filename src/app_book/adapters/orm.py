@@ -2,16 +2,10 @@ from uuid import uuid4
 
 import sqlalchemy as sa
 import sqlalchemy.orm as so
-from sqlalchemy.orm import DeclarativeBase, MappedAsDataclass
-from sqlalchemy.types import UUID
 
 from ..domain.models import BookStatusEnum
-
 from src.manager.common import types
-
-
-class BaseModel(DeclarativeBase, MappedAsDataclass):
-    type_annotation_map = {types.BookID: UUID}
+from src.manager.adapters.orm import BaseModel
 
 
 class Book(BaseModel):

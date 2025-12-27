@@ -5,7 +5,7 @@ services:
       context: .
       dockerfile: Dockerfile
       target: testing
-    command: uvicorn src.application:application --host=0.0.0.0 --reload
+    command: uvicorn src.manager.application:application --host=0.0.0.0 --reload
     ports:
       - '8000:8000'
     volumes:

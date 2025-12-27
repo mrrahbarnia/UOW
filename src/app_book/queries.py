@@ -1,13 +1,13 @@
 from typing import Literal, Sequence
 
 import sqlalchemy as sa
-from sqlalchemy.ext.asyncio import AsyncConnection
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from .adapters.orm import Book
 
 
 async def get_books(
-    session: AsyncConnection,
+    session: AsyncSession,
     limit: int,
     offset: int,
     sort_mode: Literal["DESC", "ASC"],

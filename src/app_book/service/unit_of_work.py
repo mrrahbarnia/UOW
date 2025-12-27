@@ -1,5 +1,7 @@
 from typing import Protocol, Self
+from dataclasses import asdict
 
+import orjson
 from sqlalchemy.ext.asyncio import (
     AsyncEngine,
     async_sessionmaker,
@@ -9,6 +11,10 @@ from sqlalchemy.ext.asyncio import (
 from ..adapters import repository as repo
 
 from src.manager.config import ENVS
+from src.manager.adapters.repository import (
+    IRepository as EventIRepository,
+    SqlAlchemyRepository as EventSqlAlchemyRepository,
+)
 
 ASYNC_ENGINE: AsyncEngine = create_async_engine(ENVS.POSTGRESQL.get_url)
 SESSION_MAKER = async_sessionmaker(ASYNC_ENGINE, expire_on_commit=False)
@@ -16,6 +22,7 @@ SESSION_MAKER = async_sessionmaker(ASYNC_ENGINE, expire_on_commit=False)
 
 class IUnitOfWork(Protocol):
     books: repo.IRepository
+    events: EventIRepository
 
     async def __aenter__(self) -> Self: ...
     async def __aexit__(
@@ -27,7 +34,8 @@ class IUnitOfWork(Protocol):
 
 
 class SqlAlchemyUnitOfWork:
-    books: repo.IRepository  # This is only for typing
+    books: repo.IRepository  # These are only for type safety
+    events: EventIRepository
 
     def __init__(self, session_maker=SESSION_MAKER) -> None:
         self.session_maker = session_maker
@@ -35,6 +43,7 @@ class SqlAlchemyUnitOfWork:
     async def __aenter__(self) -> Self:
         session = self.session_maker()
         self.books = repo.SqlAlchemyRepository(session)
+        self.events = EventSqlAlchemyRepository(session)
         self.session = session
         return self
 
@@ -48,6 +57,7 @@ class SqlAlchemyUnitOfWork:
             if exc_type is not None:
                 await self.rollback()
             else:
+                await self.collect_new_events()
                 await self.commit()
         finally:
             await self.session.close()
@@ -57,6 +67,18 @@ class SqlAlchemyUnitOfWork:
 
     async def commit(self):
         return await self.session.commit()
+
+    async def collect_new_events(self):
+        for book in self.books._seen:
+            while book.events:
+                event = book.events.pop(0)
+
+                payload_bytes = orjson.dumps(asdict(event))  # type: ignore
+                payload_dict = orjson.loads(payload_bytes)
+
+                await self.events.add(
+                    event_type=event.__class__.__name__, payload=payload_dict
+                )
 
 
 class FakeUnitOfWork:

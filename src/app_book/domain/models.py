@@ -17,12 +17,13 @@ class BookAlreadyBorrowedExc(Exception): ...
 class BookNotBorrowedExc(Exception): ...
 
 
-@dataclass
+@dataclass(unsafe_hash=True)
 class Book:
     id: types.BookID
     title: str
     status: BookStatusEnum
     borrow_count: int = 0
+    events: list[types.Event] = field(default_factory=list, hash=False, compare=False)
 
     @staticmethod
     def create(id: types.BookID, title: str) -> "Book":
@@ -40,3 +41,5 @@ class Book:
             raise BookNotBorrowedExc
 
         self.status = BookStatusEnum.AVAILABLE
+
+        self.events.append(events.BookReturned(id=self.id, title=self.title))

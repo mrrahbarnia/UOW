@@ -1,7 +1,7 @@
 from typing import Annotated
 from fastapi import APIRouter, status, Depends, Query
 
-from sqlalchemy.ext.asyncio import AsyncConnection
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from . import schemas, http_exceptions
 from .http_response import HTTPResponse
@@ -22,12 +22,12 @@ app = APIRouter(prefix="/v1/books", tags=["books"])
 @app.get(
     "",
     status_code=status.HTTP_200_OK,
-    response_model=PaginationResponseSchema[list[schemas.BookRead]],
+    response_model=HTTPResponse[PaginationResponseSchema[list[schemas.BookRead]]],
 )
 async def get_books(
-    session: Annotated[AsyncConnection, get_session],
+    session: Annotated[AsyncSession, Depends(get_session)],
     query_params: Annotated[schemas.BookListQueryParams, Query()],
-) -> PaginationResponseSchema[list[schemas.BookRead]]:
+) -> HTTPResponse[PaginationResponseSchema[list[schemas.BookRead]]]:
     limit, offset = query_params.to_limit_offset()
     rows, count = await queries.get_books(
         session=session,
@@ -36,7 +36,8 @@ async def get_books(
         sort_mode=query_params.sort_mode,
         title__icontain=query_params.title__icontain,
     )
-    return PaginationResponseSchema[list[schemas.BookRead]](
+
+    paginated_data = PaginationResponseSchema[list[schemas.BookRead]](
         pagination=PaginationResponse(
             current_page=query_params.current_page,
             page_size=query_params.page_size,
@@ -52,6 +53,9 @@ async def get_books(
             for row in rows
         ],
     )
+    return HTTPResponse[PaginationResponseSchema[list[schemas.BookRead]]](
+        success=True, message="Books fetched successfully", data=paginated_data
+    )
 
 
 @app.post(
@@ -66,7 +70,7 @@ async def create_book(
     try:
         book_id = await use_cases.create_book(uow=uow, title=payload.title)
 
-        return HTTPResponse(
+        return HTTPResponse[schemas.CreateBookResponse](
             success=True,
             message="Book created successfully.",
             data=schemas.CreateBookResponse(id=book_id, title=payload.title),

@@ -1,4 +1,4 @@
-from typing import Protocol
+from typing import Protocol, Set
 
 import sqlalchemy as sa
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -10,6 +10,8 @@ from src.manager.common import types
 
 
 class IRepository(Protocol):
+    _seen: Set[DomainBook] = set()
+
     def __init__(self, session: AsyncSession) -> None: ...
     async def get_by_id(
         self, id: types.BookID, lock: bool = False
@@ -21,6 +23,7 @@ class IRepository(Protocol):
 class SqlAlchemyRepository:
     def __init__(self, session: AsyncSession) -> None:
         self.session = session
+        self._seen: Set[DomainBook] = set()
 
     async def get_by_id(
         self, id: types.BookID, lock: bool = False
@@ -39,12 +42,15 @@ class SqlAlchemyRepository:
         if orm_book is None:
             return None
 
-        return DomainBook(
-            id=orm_book.id,
+        domain_book = DomainBook(
+            id=str(orm_book.id),  # type: ignore
             title=orm_book.title,
             status=orm_book.status,
             borrow_count=orm_book.borrow_count,
         )
+        self._seen.add(domain_book)
+
+        return domain_book
 
     async def add(self, domain_book: DomainBook) -> types.BookID | None:
         stmt = (
@@ -59,6 +65,7 @@ class SqlAlchemyRepository:
             )
             .returning(ORMBook.id)
         )
+        self._seen.add(domain_book)
         return await self.session.scalar(stmt)
 
     async def update(self, domain_book: DomainBook) -> None:
@@ -73,6 +80,7 @@ class SqlAlchemyRepository:
             )
             .where(ORMBook.id == domain_book.id)
         )
+        self._seen.add(domain_book)
         await self.session.execute(stmt)
 
 

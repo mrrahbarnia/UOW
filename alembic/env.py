@@ -7,9 +7,9 @@ from sqlalchemy.ext.asyncio import async_engine_from_config
 
 from alembic import context
 
-from src.config import ENVS
-from src.modules.book.adapters import orm
-# from src.config.schemas.postgres import PostgreSQL
+from src.manager.config import ENVS
+from src.manager.adapters.orm import BaseModel
+from src.app_book.adapters import orm as book_orm  # noqa
 
 config = context.config
 
@@ -18,7 +18,7 @@ config.set_main_option("sqlalchemy.url", ENVS.POSTGRESQL.get_url)
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-target_metadata = orm.BaseModel.metadata
+target_metadata = BaseModel.metadata
 
 
 def run_migrations_offline() -> None:

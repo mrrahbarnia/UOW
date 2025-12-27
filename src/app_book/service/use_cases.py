@@ -1,10 +1,8 @@
 from uuid import uuid4
 
-from . import messagebus
 from . import exceptions as exc
 from .unit_of_work import IUnitOfWork
 from ..domain.models import Book as DomainBook
-from ..domain.events import BookReturned
 
 from src.manager.common.types import BookID
 
@@ -33,5 +31,3 @@ async def return_book(uow: IUnitOfWork, book_id: BookID) -> None:
             raise exc.EntityNotFound
         book.return_book()
         await uow.books.update(domain_book=book)
-
-    await messagebus.handle(BookReturned(id=book_id, title=book.title))
